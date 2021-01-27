@@ -9,14 +9,11 @@ import model.entities.Department;
 
 public class DepartmentService {
 
-	private DepartmentDAO dao = DaoFactory.createDepartmentDAO();
-	
+	//private DepartmentDAO dao = DaoFactory.createDepartmentDAO();
+
 	public List<Department> findAll() {
-		/*
-		 * return dao.findAll();
-		 */
-		
-		
+		//return dao.findAll();
+
 		List<Department> list = new ArrayList<>();
 		list.add(new Department(1, "Livros"));
 		list.add(new Department(2, "Computadores"));
