@@ -3,17 +3,25 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import db.DbException;
+import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Department;
+import model.services.DepartmentService;
 
 public class DepartmentFormController implements Initializable {
 
 	private Department entity;
+
+	private DepartmentService service;
 
 	@FXML
 	private TextField txtID;
@@ -34,14 +42,39 @@ public class DepartmentFormController implements Initializable {
 		this.entity = entity;
 	}
 
-	@FXML
-	public void onBtnSaveAction() {
-		System.out.println("onBtnSaveAction");
+	public void setDepartmentService(DepartmentService service) {
+		this.service = service;
 	}
 
 	@FXML
-	public void onBtnCancelAction() {
-		System.out.println("onBtnCancelAction");
+	public void onBtnSaveAction(ActionEvent event) {
+		if (entity == null) {
+			throw new IllegalStateException("Entidade não atribuída (nula)");
+		}
+		if (service == null) {
+			throw new IllegalStateException("Serviço não atribuído (nulo)");
+		}
+		try {
+			entity = getFormData();
+			
+			
+			//service.SaveOrUpdate(entity);
+			
+			
+			
+			Utils.currentStage(event).close();
+		} catch (DbException e) {
+			Alerts.showAlert("Erro salvando dados", null, e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	private Department getFormData() {
+		return new Department(Utils.tryParseToInt(txtID.getText()), txtName.getText());
+	}
+
+	@FXML
+	public void onBtnCancelAction(ActionEvent event) {
+		Utils.currentStage(event).close();
 	}
 
 	@Override
